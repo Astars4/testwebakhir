@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Sejarah Indonesia</title>
+    <style>
+      body {
+        font-family: "Quicksand", sans-serif;
+        overflow-x: hidden;
+      }
+
+      .content {
+        transition: opacity 0.5s ease-in-out;
+      }
+
+      .hidden {
+        opacity: 0;
+        display: none;
+      }
+
+      .visible {
+        opacity: 1;
+        display: block;
+      }
+
+      /* Slide Presentation Styles */
+      .slide-presentation {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        overflow: hidden;
+      }
+
+      .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.5s ease-in-out;
+        padding: 20px;
+        box-sizing: border-box;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .slide-navigation {
+        position: absolute;
+        bottom: 20px;
+        width: calc(100% - 40px);
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .slide-indicator {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      .indicator-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: #ccc;
+        margin: 0 5px;
+        cursor: pointer;
+      }
+
+      .indicator-dot.active {
+        background-color: #3b82f6;
+      }
+
+      .materi-nav {
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .materi-nav:hover {
+        background-color: #f0f0f0;
+      }
+
+      .materi-nav.active {
+        background-color: #3b82f6;
+        color: white;
+      }
+
+      .timeline-event {
+        padding: 15px;
+        margin-bottom: 15px;
+        border-left: 4px solid #3b82f6;
+        background-color: #f8fafc;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .timeline-year {
+        font-weight: bold;
+        color: #3b82f6;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body class="font-mono">
+    <div
+      id="bg"
+      class="flex flex-col items-center justify-center w-screen min-h-screen px-4 bg-center bg-cover sm:px-6 lg:px-10"
+      style="background-image: url('https://wallpaper.dog/large/20557560.jpg')"
+    >
+      <h1
+        class="mt-4 mb-10 text-2xl font-semibold text-center text-black sm:text-3xl lg:text-4xl"
+      >
+        Sejarah Indonesia
+      </h1>
+      <div class="w-full max-w-4xl">
+        <!-- Menu Slide -->
+        <div class="flex justify-between mb-5 flex-wrap gap-2">
+          <button
+            onclick="handleMenu('materi')"
+            class="px-4 py-2 text-black transition border border-blue-500 rounded-md hover:bg-blue-500 hover:text-white"
+          >
+            Materi
+          </button>
+          <button
+            onclick="handleMenu('materiVideo')"
+            class="px-4 py-2 text-black transition border border-blue-500 rounded-md hover:bg-blue-500 hover:text-white"
+          >
+            Materi Video
+          </button>
+          <button
+            onclick="handleMenu('quiz')"
+            class="px-4 py-2 text-black transition border border-blue-500 rounded-md hover:bg-blue-500 hover:text-white"
+          >
+            Quiz
+          </button>
+          <button
+            onclick="handleMenu('timeline')"
+            class="px-4 py-2 text-black transition border border-blue-500 rounded-md hover:bg-blue-500 hover:text-white"
+          >
+            Timeline
+          </button>
+          <button
+            onclick="handleMenu('developer')"
+            class="px-4 py-2 text-black transition border border-blue-500 rounded-md hover:bg-blue-500 hover:text-white"
+          >
+            Developer
+          </button>
+        </div>
+
+        <!-- Output Konten -->
+        <div
+          id="output"
+          class="w-full p-4 bg-white rounded-lg shadow-md min-h-[500px] relative overflow-hidden"
+        >
+          <!-- Konten Materi -->
+          <div id="materiContent" class="content">
+            <div class="flex">
+              <!-- Daftar Materi -->
+              <div class="w-1/3 pr-4 border-r">
+                <h2 class="text-xl font-bold mb-4">Daftar Materi</h2>
+                <div class="space-y-2">
+                  <div
+                    onclick="showMateri(1)"
+                    class="p-2 rounded materi-nav active"
+                    id="nav1"
+                  >
+                    1. Zaman Prasejarah
+                  </div>
+                  <div
+                    onclick="showMateri(2)"
+                    class="p-2 rounded materi-nav"
+                    id="nav2"
+                  >
+                    2. Kerajaan Hindu-Buddha
+                  </div>
+                  <div
+                    onclick="showMateri(3)"
+                    class="p-2 rounded materi-nav"
+                    id="nav3"
+                  >
+                    3. Kerajaan Islam
+                  </div>
+                  <div
+                    onclick="showMateri(4)"
+                    class="p-2 rounded materi-nav"
+                    id="nav4"
+                  >
+                    4. Kolonialisme Eropa
+                  </div>
+                  <div
+                    onclick="showMateri(5)"
+                    class="p-2 rounded materi-nav"
+                    id="nav5"
+                  >
+                    5. Pergerakan Nasional
+                  </div>
+                  <div
+                    onclick="showMateri(6)"
+                    class="p-2 rounded materi-nav"
+                    id="nav6"
+                  >
+                    6. Pendudukan Jepang
+                  </div>
+                  <div
+                    onclick="showMateri(7)"
+                    class="p-2 rounded materi-nav"
+                    id="nav7"
+                  >
+                    7. Revolusi Kemerdekaan
+                  </div>
+                  <div
+                    onclick="showMateri(8)"
+                    class="p-2 rounded materi-nav"
+                    id="nav8"
+                  >
+                    8. Orde Baru & Reformasi
+                  </div>
+                </div>
+              </div>
+
+              <!-- Isi Materi dalam Format Slide -->
+              <div class="w-2/3 pl-4">
+                <div class="slide-presentation">
+                  <!-- Slide Materi -->
+                  <div class="slide" id="materi1">
+                    <h2 class="text-xl font-bold mb-4">1. Zaman Prasejarah</h2>
+                    <p class="mb-4">
+                      Zaman prasejarah Indonesia dimulai sejak manusia pertama
+                      menghuni kepulauan ini sekitar 1,5 juta tahun yang lalu.
+                    </p>
+                    <p class="mb-2"><strong>Fase-fase penting:</strong></p>
+                    <ul class="list-disc pl-5 mb-4">
+                      <li>Zaman Batu Tua (Paleolitikum)</li>
+                      <li>Zaman Batu Tengah (Mesolitikum)</li>
+                      <li>Zaman Batu Muda (Neolitikum)</li>
+                      <li>Zaman Logam</li>
+                    </ul>
+                    <p>
+                      Peninggalan penting dari zaman ini antara lain fosil
+                      Pithecanthropus erectus di Trinil, Ngawi dan berbagai alat
+                      batu yang ditemukan di seluruh Nusantara.
+                    </p>
+
+                    <div class="slide-navigation">
+                      <button
+                        onclick="prevSlide()"
+                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                      >
+                        Sebelumnya
+                      </button>
+                      <button
+                        onclick="nextSlide()"
+                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        Selanjutnya
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="slide" id="materi2">
+                    <h2 class="text-xl font-bold mb-4">
+                      2. Kerajaan Hindu-Buddha
+                    </h2>
+                    <p class="mb-4">
+                      Periode kerajaan Hindu-Buddha di Indonesia berlangsung
+                      dari abad ke-4 hingga abad ke-15 Masehi.
+                    </p>
+                    <p class="mb-2"><strong>Kerajaan penting:</strong></p>
+                    <ul class="list-disc pl-5 mb-4">
+                      <li>Kutai (Kerajaan tertua di Indonesia)</li>
+                      <li>Tarumanegara</li>
+                      <li>Mataram Kuno</li>
+                      <li>Sriwijaya (Kerajaan maritim terbesar)</li>
+                      <li>Majapahit (Kerajaan terbesar di Nusantara)</li>
+                    </ul>
+                    <p>
+                      Peninggalan penting termasuk Candi Borobudur, Prambanan,
+                      prasasti-prasasti, dan sistem pemerintahan yang teratur.
+                    </p>
+
+                    <div class="slide-navigation">
+                      <button
+                        onclick="prevSlide()"
+                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                      >
+                        Sebelumnya
+                      </button>
+                      <button
+                        onclick="nextSlide()"
+                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        Selanjutnya
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="slide" id="materi3">
+                    <h2 class="text-xl font-bold mb-4">3. Kerajaan Islam</h2>
+                    <p class="mb-4">
+                      Penyebaran Islam di Indonesia dimulai sekitar abad ke-13
+                      dan berkembang pesat pada abad ke-15.
+                    </p>
+                    <p class="mb-2"><strong>Kerajaan penting:</strong></p>
+                    <ul class="list-disc pl-5 mb-4">
+                      <li>Samudera Pasai (Kerajaan Islam pertama)</li>
+                      <li>Demak</li>
+                      <li>Mataram Islam</li>
+                      <li>Banten</li>
+                      <li>Gowa-Tallo</li>
+                    </ul>
+                    <p>
+                      Peninggalan penting termasuk masjid-masjid kuno, makam
+                      para wali, dan karya sastra seperti Babad Tanah Jawi.
+                    </p>
+
+                    <div class="slide-navigation">
+                      <button
+                        onclick="prevSlide()"
+                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                      >
+                        Sebelumnya
+                      </button>
+                      <button
+                        onclick="nextSlide()"
+                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        Selanjutnya
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="slide" id="materi4">
+                    <h2 class="text-xl font-bold mb-4">
+                      4. Kolonialisme Eropa
+                    </h2>
+                    <p class="mb-4">
+                      Kedatangan bangsa Eropa dimulai dengan Portugis pada 1512,
+                      diikuti oleh Spanyol, Belanda, dan Inggris.
+                    </p>
+                    <p class="mb-2"><strong>Periode penting:</strong></p>
+                    <ul class="list-disc pl-5 mb-4">
+                      <li>VOC (1602-1799)</li>
+                      <li>Pemerintahan Hindia Belanda (1800-1942)</li>
+                      <li>Sistem Tanam Paksa (1830-1870)</li>
+                      <li>Politik Etis (1901)</li>
+                    </ul>
+                    <p>
+                      Kolonialisme membawa perubahan besar dalam sistem
+                      pemerintahan, ekonomi, dan sosial masyarakat Indonesia.
+                    </p>
+
+                    <div class="slide-navigation">
+                      <button
+                        onclick="prevSlide()"
+                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                      >
+                        Sebelumnya
+                      </button>
+                      <button
+                        onclick="nextSlide()"
+                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        Selanjutnya
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="slide" id="materi5">
+                    <h2 class="text-xl font-bold mb-4">
+                      5. Pergerakan Nasional
+                    </h2>
+                    <p class="mb-4">
+                      Awal abad ke-20 menandai bangkitnya kesadaran nasional
+                      melawan kolonialisme.
+                    </p>
+                    <p class="mb-2"><strong>Organisasi penting:</strong></p>
+                    <ul class="list-disc pl-5 mb-4">
+                      <li>Budi Utomo (1908)</li>
+                      <li>Sarekat Islam (1911)</li>
+                      <li>Indische Partij (1912)</li>
+                      <li>Partai Komunis Indonesia (1920)</li>
+                      <li>Partai Nasional Indonesia (1927)</li>
+                    </ul>
+                    <p>
+                      Peristiwa penting termasuk Sumpah Pemuda 1928 yang menjadi
+                      dasar persatuan bangsa.
+                    </p>
+
+                    <div class="slide-navigation">
+                      <button
+                        onclick="prevSlide()"
+                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                      >
+                        Sebelumnya
+                      </button>
+                      <button
+                        onclick="nextSlide()"
+                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        Selanjutnya
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="slide" id="materi6">
+                    <h2 class="text-xl font-bold mb-4">6. Pendudukan Jepang</h2>
+                    <p class="mb-4">
+                      Jepang menduduki Indonesia dari 1942 hingga 1945 selama
+                      Perang Dunia II.
+                    </p>
+                    <p class="mb-2"><strong>Dampak penting:</strong></p>
+                    <ul class="list-disc pl-5 mb-4">
+                      <li>Penghapusan sistem kolonial Belanda</li>
+                      <li>Militerisasi masyarakat melalui PETA dan Heiho</li>
+                      <li>Eksploitasi ekonomi (romusha)</li>
+                      <li>Persiapan kemerdekaan melalui BPUPKI dan PPKI</li>
+                    </ul>
+                    <p>
+                      Meski singkat, pendudukan Jepang memainkan peran penting
+                      dalam persiapan kemerdekaan Indonesia.
+                    </p>
+
+                    <div class="slide-navigation">
+                      <button
+                        onclick="prevSlide()"
+                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                      >
+                        Sebelumnya
+                      </button>
+                      <button
+                        onclick="nextSlide()"
+                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        Selanjutnya
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="slide" id="materi7">
+                    <h2 class="text-xl font-bold mb-4">
+                      7. Revolusi Kemerdekaan
+                    </h2>
+                    <p class="mb-4">
+                      Proklamasi Kemerdekaan pada 17 Agustus 1945 menandai awal
+                      perjuangan mempertahankan kemerdekaan.
+                    </p>
+                    <p class="mb-2"><strong>Peristiwa penting:</strong></p>
+                    <ul class="list-disc pl-5 mb-4">
+                      <li>Proklamasi Kemerdekaan (1945)</li>
+                      <li>Pertempuran Surabaya (1945)</li>
+                      <li>Agresi Militer Belanda I dan II</li>
+                      <li>Konferensi Meja Bundar (1949)</li>
+                      <li>Pengakuan Kedaulatan (1949)</li>
+                    </ul>
+                    <p>
+                      Periode ini menunjukkan tekad bangsa Indonesia untuk
+                      merdeka dan berdaulat.
+                    </p>
+
+                    <div class="slide-navigation">
+                      <button
+                        onclick="prevSlide()"
+                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                      >
+                        Sebelumnya
+                      </button>
+                      <button
+                        onclick="nextSlide()"
+                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        Selanjutnya
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="slide" id="materi8">
+                    <h2 class="text-xl font-bold mb-4">
+                      8. Orde Baru & Reformasi
+                    </h2>
+                    <p class="mb-4">
+                      Indonesia modern melalui berbagai periode pemerintahan
+                      setelah kemerdekaan.
+                    </p>
+                    <p class="mb-2"><strong>Periode penting:</strong></p>
+                    <ul class="list-disc pl-5 mb-4">
+                      <li>Demokrasi Terpimpin (1959-1965)</li>
+                      <li>Orde Baru (1966-1998)</li>
+                      <li>Reformasi (1998-sekarang)</li>
+                    </ul>
+                    <p>
+                      Setiap periode memiliki karakteristik dan tantangan
+                      tersendiri dalam membangun bangsa dan negara.
+                    </p>
+
+                    <div class="slide-navigation">
+                      <button
+                        onclick="prevSlide()"
+                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                      >
+                        Sebelumnya
+                      </button>
+                      <button
+                        <button
+                        onclick="nextSlide()"
+                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        Selanjutnya
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slide Indicator -->
+                <div class="slide-indicator">
+                  <div
+                    class="indicator-dot active"
+                    onclick="goToSlide(0)"
+                  ></div>
+                  <div class="indicator-dot" onclick="goToSlide(1)"></div>
+                  <div class="indicator-dot" onclick="goToSlide(2)"></div>
+                  <div class="indicator-dot" onclick="goToSlide(3)"></div>
+                  <div class="indicator-dot" onclick="goToSlide(4)"></div>
+                  <div class="indicator-dot" onclick="goToSlide(5)"></div>
+                  <div class="indicator-dot" onclick="goToSlide(6)"></div>
+                  <div class="indicator-dot" onclick="goToSlide(7)"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Konten Materi Video -->
+          <div id="materiVideoContent" class="hidden content">
+            <h2 class="text-xl font-bold">Materi Video</h2>
+            <p>Berikut adalah link video pembelajaran:</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div class="border p-4 rounded-lg">
+                <h3 class="font-bold mb-2">Zaman Prasejarah</h3>
+                <iframe
+                  width="100%"
+                  height="200"
+                  src="https://www.youtube.com/embed/VIDEO_ID_1"
+                  frameborder="0"
+                  allowfullscreen
+                ></iframe>
+              </div>
+              <div class="border p-4 rounded-lg">
+                <h3 class="font-bold mb-2">Kerajaan Hindu-Buddha</h3>
+                <iframe
+                  width="100%"
+                  height="200"
+                  src="https://www.youtube.com/embed/VIDEO_ID_2"
+                  frameborder="0"
+                  allowfullscreen
+                ></iframe>
+              </div>
+              <div class="border p-4 rounded-lg">
+                <h3 class="font-bold mb-2">Perjuangan Kemerdekaan</h3>
+                <iframe
+                  width="100%"
+                  height="200"
+                  src="https://www.youtube.com/embed/VIDEO_ID_3"
+                  frameborder="0"
+                  allowfullscreen
+                ></iframe>
+              </div>
+              <div class="border p-4 rounded-lg">
+                <h3 class="font-bold mb-2">Reformasi 1998</h3>
+                <iframe
+                  width="100%"
+                  height="200"
+                  src="https://www.youtube.com/embed/VIDEO_ID_4"
+                  frameborder="0"
+                  allowfullscreen
+                ></iframe>
+              </div>
+            </div>
+            <a
+              href="https://www.youtube.com/results?search_query=sejarah+indonesia"
+              target="_blank"
+              class="mt-4 inline-block text-blue-500 hover:underline"
+            >
+              Tonton Lebih Banyak Video Sejarah Indonesia di YouTube
+            </a>
+          </div>
+
+          <!-- Konten Quiz -->
+          <div id="quizContent" class="hidden content">
+            <h2 class="text-xl font-bold">Quiz</h2>
+            <p>Silakan jawab pertanyaan berikut:</p>
+            <div id="quizContainer"></div>
+            <div id="quizResult" class="hidden">
+              <p id="resultText"></p>
+              <button
+                onclick="resetQuiz()"
+                class="px-4 py-2 mt-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+              >
+                Ulang Quiz
+              </button>
+            </div>
+          </div>
+
+          <!-- Konten Timeline -->
+          <div id="timelineContent" class="hidden content">
+            <h2 class="text-xl font-bold mb-6">Timeline Sejarah Indonesia</h2>
+
+            <div class="slide-presentation">
+              <!-- Slide Timeline -->
+              <div class="slide">
+                <h3 class="text-lg font-bold mb-4">
+                  Zaman Prasejarah (1.5 juta tahun SM - 400 M)
+                </h3>
+                <div class="timeline-event">
+                  <div class="timeline-year">1.5 juta tahun SM</div>
+                  <p>
+                    Manusia pertama (Pithecanthropus erectus) menghuni wilayah
+                    Indonesia
+                  </p>
+                </div>
+                <div class="timeline-event">
+                  <div class="timeline-year">3000 SM</div>
+                  <p>Migrasi bangsa Austronesia ke Nusantara</p>
+                </div>
+                <div class="timeline-event">
+                  <div class="timeline-year">500 SM</div>
+                  <p>Penggunaan alat logam (zaman perunggu)</p>
+                </div>
+
+                <div class="slide-navigation">
+                  <button
+                    onclick="prevTimelineSlide()"
+                    class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                  >
+                    Sebelumnya
+                  </button>
+                  <button
+                    onclick="nextTimelineSlide()"
+                    class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    Selanjutnya
+                  </button>
+                </div>
+              </div>
+
+              <div class="slide">
+                <h3 class="text-lg font-bold mb-4">
+                  Kerajaan Hindu-Buddha (400-1500 M)
+                </h3>
+                <div class="timeline-event">
+                  <div class="timeline-year">400 M</div>
+                  <p>Kerajaan Kutai sebagai kerajaan tertua di Indonesia</p>
+                </div>
+                <div class="timeline-event">
+                  <div class="timeline-year">732 M</div>
+                  <p>Kerajaan Mataram Kuno membangun Candi Borobudur</p>
+                </div>
+                <div class="timeline-event">
+                  <div class="timeline-year">1293-1527</div>
+                  <p>Kerajaan Majapahit mencapai puncak kejayaan</p>
+                </div>
+
+                <div class="slide-navigation">
+                  <button
+                    onclick="prevTimelineSlide()"
+                    class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                  >
+                    Sebelumnya
+                  </button>
+                  <button
+                    onclick="nextTimelineSlide()"
+                    class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    Selanjutnya
+                  </button>
+                </div>
+              </div>
+
+              <div class="slide">
+                <h3 class="text-lg font-bold mb-4">
+                  Kolonialisme Eropa (1512-1942)
+                </h3>
+                <div class="timeline-event">
+                  <div class="timeline-year">1512</div>
+                  <p>
+                    Portugis menjadi bangsa Eropa pertama yang tiba di Indonesia
+                  </p>
+                </div>
+                <div class="timeline-event">
+                  <div class="timeline-year">1602</div>
+                  <p>Pendirian VOC oleh Belanda</p>
+                </div>
+                <div class="timeline-event">
+                  <div class="timeline-year">1830-1870</div>
+                  <p>Sistem Tanam Paksa (Cultuurstelsel) diberlakukan</p>
+                </div>
+
+                <div class="slide-navigation">
+                  <button
+                    onclick="prevTimelineSlide()"
+                    class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                  >
+                    Sebelumnya
+                  </button>
+                  <button
+                    onclick="nextTimelineSlide()"
+                    class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    Selanjutnya
+                  </button>
+                </div>
+              </div>
+
+              <div class="slide">
+                <h3 class="text-lg font-bold mb-4">
+                  Perjuangan Kemerdekaan (1942-1949)
+                </h3>
+                <div class="timeline-event">
+                  <div class="timeline-year">1942-1945</div>
+                  <p>Pendudukan Jepang di Indonesia</p>
+                </div>
+                <div class="timeline-event">
+                  <div class="timeline-year">17 Agustus 1945</div>
+                  <p>Proklamasi Kemerdekaan Indonesia</p>
+                </div>
+                <div class="timeline-event">
+                  <div class="timeline-year">1945-1949</div>
+                  <p>Revolusi Nasional melawan Belanda</p>
+                </div>
+
+                <div class="slide-navigation">
+                  <button
+                    onclick="prevTimelineSlide()"
+                    class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                  >
+                    Sebelumnya
+                  </button>
+                  <button
+                    onclick="nextTimelineSlide()"
+                    class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    Selanjutnya
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Timeline Indicator -->
+            <div class="slide-indicator mt-4">
+              <div
+                class="indicator-dot active"
+                onclick="goToTimelineSlide(0)"
+              ></div>
+              <div class="indicator-dot" onclick="goToTimelineSlide(1)"></div>
+              <div class="indicator-dot" onclick="goToTimelineSlide(2)"></div>
+              <div class="indicator-dot" onclick="goToTimelineSlide(3)"></div>
+            </div>
+          </div>
+
+          <!-- Konten Developer -->
+          <div id="developerContent" class="hidden content">
+            <h2 class="text-xl font-bold">Developer</h2>
+            <p>Informasi tentang developer:</p>
+            <div class="mt-4 p-4 bg-gray-100 rounded-lg">
+              <p class="font-semibold">Nama: M. Arifin Bachtiar</p>
+              <p class="font-semibold">NIM: 2305176070</p>
+              <p class="mt-2">
+                Aplikasi ini dibuat untuk memenuhi tugas mata kuliah
+                Pengembangan Multimedia Pembelajaran.
+              </p>
+              <p class="mt-2">Fitur yang tersedia:</p>
+              <ul class="list-disc pl-5 mt-1">
+                <li>8 Materi Pembelajaran Sejarah Indonesia</li>
+                <li>Koleksi Video Pembelajaran</li>
+                <li>Quiz Interaktif</li>
+                <li>Timeline Sejarah</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Fungsi untuk menangani pilihan menu
+      function handleMenu(menu) {
+        const contents = document.querySelectorAll("#output .content");
+        contents.forEach((content) => {
+          content.classList.add("hidden");
+        });
+        document.getElementById(`${menu}Content`).classList.remove("hidden");
+
+        // Jika menu Quiz dipilih, muat pertanyaan pertama
+        if (menu === "quiz") {
+          resetQuiz();
+        }
+
+        // Jika menu Materi dipilih, reset slide materi
+        if (menu === "materi") {
+          goToSlide(0);
+          showMateri(1);
+        }
+
+        // Jika menu Timeline dipilih, reset slide timeline
+        if (menu === "timeline") {
+          goToTimelineSlide(0);
+        }
+      }
+
+      // ========== Fungsi untuk Slide Materi ==========
+      let currentSlideIndex = 0;
+      const materiSlides = document.querySelectorAll("#materiContent .slide");
+      const totalMateriSlides = materiSlides.length;
+      const materiIndicators = document.querySelectorAll(
+        "#materiContent .indicator-dot"
+      );
+
+      function showSlide(index) {
+        // Validasi index
+        if (index < 0) index = totalMateriSlides - 1;
+        if (index >= totalMateriSlides) index = 0;
+
+        currentSlideIndex = index;
+
+        // Update posisi slide
+        materiSlides.forEach((slide, i) => {
+          slide.style.transform = `translateX(${100 * (i - index)}%)`;
+        });
+
+        // Update indikator
+        materiIndicators.forEach((dot, i) => {
+          dot.classList.toggle("active", i === index);
+        });
+
+        // Update navigasi materi
+        showMateri(index + 1);
+      }
+
+      function nextSlide() {
+        showSlide(currentSlideIndex + 1);
+      }
+
+      function prevSlide() {
+        showSlide(currentSlideIndex - 1);
+      }
+
+      function goToSlide(index) {
+        showSlide(index);
+      }
+
+      // ========== Fungsi untuk Navigasi Materi ==========
+      let currentMateri = 1;
+      const totalMateri = 8;
+
+      function showMateri(index) {
+        // Validasi index
+        if (index < 1) index = totalMateri;
+        if (index > totalMateri) index = 1;
+
+        currentMateri = index;
+
+        // Nonaktifkan semua navigasi
+        document.querySelectorAll(".materi-nav").forEach((nav) => {
+          nav.classList.remove("active");
+        });
+
+        // Aktifkan navigasi yang dipilih
+        document.getElementById(`nav${index}`).classList.add("active");
+
+        // Pindah ke slide yang sesuai
+        goToSlide(index - 1);
+      }
+
+      function nextMateri() {
+        showMateri(currentMateri + 1);
+      }
+
+      function prevMateri() {
+        showMateri(currentMateri - 1);
+      }
+
+      // ========== Fungsi untuk Slide Timeline ==========
+      let currentTimelineSlideIndex = 0;
+      const timelineSlides = document.querySelectorAll(
+        "#timelineContent .slide"
+      );
+      const totalTimelineSlides = timelineSlides.length;
+      const timelineIndicators = document.querySelectorAll(
+        "#timelineContent .indicator-dot"
+      );
+
+      function showTimelineSlide(index) {
+        // Validasi index
+        if (index < 0) index = totalTimelineSlides - 1;
+        if (index >= totalTimelineSlides) index = 0;
+
+        currentTimelineSlideIndex = index;
+
+        // Update posisi slide
+        timelineSlides.forEach((slide, i) => {
+          slide.style.transform = `translateX(${100 * (i - index)}%)`;
+        });
+
+        // Update indikator
+        timelineIndicators.forEach((dot, i) => {
+          dot.classList.toggle("active", i === index);
+        });
+      }
+
+      function nextTimelineSlide() {
+        showTimelineSlide(currentTimelineSlideIndex + 1);
+      }
+
+      function prevTimelineSlide() {
+        showTimelineSlide(currentTimelineSlideIndex - 1);
+      }
+
+      function goToTimelineSlide(index) {
+        showTimelineSlide(index);
+      }
+
+      // ========== Fungsi untuk Quiz ==========
+      // Data Kuis
+      const quizData = [
+        {
+          question:
+            "Siapa yang membacakan teks Proklamasi Kemerdekaan Indonesia?",
+          options: ["Soekarno", "Mohammad Hatta", "Sutan Sjahrir", "Bung Tomo"],
+          answer: "Soekarno",
+        },
+        {
+          question: "Kerajaan Hindu tertua di Indonesia adalah?",
+          options: ["Kutai", "Majapahit", "Sriwijaya", "Tarumanegara"],
+          answer: "Kutai",
+        },
+        {
+          question: "Perang Diponegoro terjadi pada tahun berapa?",
+          options: ["1825-1830", "1945-1949", "1900-1905", "1800-1805"],
+          answer: "1825-1830",
+        },
+        {
+          question: "Sumpah Pemuda terjadi pada tahun?",
+          options: ["1928", "1945", "1908", "1918"],
+          answer: "1928",
+        },
+        {
+          question:
+            "Gerakan Reformasi 1998 bertujuan untuk mengakhiri pemerintahan siapa?",
+          options: ["Soeharto", "Soekarno", "BJ Habibie", "Gus Dur"],
+          answer: "Soeharto",
+        },
+      ];
+
+      let currentQuestion = 0;
+      let score = 0;
+
+      // Fungsi untuk menampilkan pertanyaan
+      function loadQuestion() {
+        const quizContainer = document.getElementById("quizContainer");
+        const questionData = quizData[currentQuestion];
+
+        quizContainer.innerHTML = `
+      <h3 class="text-xl font-bold mb-4">${questionData.question}</h3>
+      <div class="space-y-4">
+        ${questionData.options
+          .map(
+            (option) => `
+          <button onclick="selectAnswer('${option}')" class="w-full bg-gray-200 p-4 rounded-lg hover:bg-gray-300">
+            ${option}
+          </button>
+        `
+          )
+          .join("")}
+      </div>
+      <div class="mt-4 text-gray-600">
+        Pertanyaan ${currentQuestion + 1} dari ${quizData.length}
+      </div>
+    `;
+      }
+
+      // Fungsi untuk memilih jawaban
+      function selectAnswer(selectedOption) {
+        const correctAnswer = quizData[currentQuestion].answer;
+        const buttons = document.querySelectorAll("#quizContainer button");
+
+        // Nonaktifkan semua tombol setelah jawaban dipilih
+        buttons.forEach((button) => {
+          button.disabled = true;
+        });
+
+        // Cek jawaban dan beri feedback
+        buttons.forEach((button) => {
+          if (button.innerText === correctAnswer) {
+            button.classList.add("bg-green-500", "text-white"); // Jawaban benar
+          } else if (button.innerText === selectedOption) {
+            button.classList.add("bg-red-500", "text-white"); // Jawaban salah
+          }
+        });
+
+        // Tambah skor jika jawaban benar
+        if (selectedOption === correctAnswer) {
+          score++;
+        }
+
+        // Lanjut ke soal berikutnya setelah 1 detik
+        setTimeout(() => {
+          if (currentQuestion < quizData.length - 1) {
+            currentQuestion++;
+            loadQuestion();
+          } else {
+            showResult();
+          }
+        }, 1000);
+      }
+
+      // Fungsi untuk menampilkan hasil kuis
+      function showResult() {
+        const quizContainer = document.getElementById("quizContainer");
+        const quizResult = document.getElementById("quizResult");
+        const resultText = document.getElementById("resultText");
+
+        quizContainer.classList.add("hidden");
+        quizResult.classList.remove("hidden");
+
+        // Hitung persentase
+        const percentage = Math.round((score / quizData.length) * 100);
+        let message = "";
+
+        if (percentage >= 80) {
+          message =
+            "Sangat Baik! Anda sangat menguasai materi sejarah Indonesia.";
+        } else if (percentage >= 60) {
+          message = "Baik! Anda cukup memahami sejarah Indonesia.";
+        } else {
+          message =
+            "Anda perlu mempelajari lebih lanjut tentang sejarah Indonesia.";
+        }
+
+        resultText.innerHTML = `
+      <p class="text-lg font-semibold">Anda menjawab <span class="text-blue-600">${score}</span> dari ${quizData.length} pertanyaan dengan benar (${percentage}%).</p>
+      <p class="mt-2">${message}</p>
+    `;
+      }
+
+      // Fungsi untuk mengulang kuis
+      function resetQuiz() {
+        currentQuestion = 0;
+        score = 0;
+        document.getElementById("quizResult").classList.add("hidden");
+        document.getElementById("quizContainer").classList.remove("hidden");
+        loadQuestion();
+      }
+
+      // Keyboard Navigation
+      document.addEventListener("keydown", (e) => {
+        // Navigasi slide materi
+        if (
+          document
+            .getElementById("materiContent")
+            .classList.contains("hidden") === false
+        ) {
+          if (e.key === "ArrowRight") nextSlide();
+          else if (e.key === "ArrowLeft") prevSlide();
+        }
+
+        // Navigasi slide timeline
+        if (
+          document
+            .getElementById("timelineContent")
+            .classList.contains("hidden") === false
+        ) {
+          if (e.key === "ArrowRight") nextTimelineSlide();
+          else if (e.key === "ArrowLeft") prevTimelineSlide();
+        }
+      });
+
+      // Initialize
+      showSlide(0);
+      showTimelineSlide(0);
+      showMateri(1);
+
+      // Load quiz if quiz is active on page load
+      if (window.location.hash === "#quiz") {
+        handleMenu("quiz");
+      }
+    </script>
+  </body>
+</html>

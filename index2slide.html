@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Slide Presentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: transform 0.5s ease-in-out;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <div class="slides-container h-screen w-full overflow-hidden relative">
+      <div
+        class="slide h-screen w-full flex items-center justify-center bg-blue-500"
+      >
+        <h1 class="text-4xl text-white">Slide 1</h1>
+      </div>
+      <div
+        class="slide h-screen w-full flex items-center justify-center bg-green-500"
+      >
+        <h1 class="text-4xl text-white">Slide 2</h1>
+      </div>
+      <div
+        class="slide h-screen w-full flex items-center justify-center bg-red-500"
+      >
+        <h1 class="text-4xl text-white">Slide 3</h1>
+      </div>
+    </div>
+    <script>
+      let currentSlide = 0;
+      const slides = document.querySelectorAll(".slide");
+      const totalSlides = slides.length;
+
+      function showSlide(index) {
+        slides.forEach((slide, i) => {
+          slide.style.transform = `translateX(${100 * (i - index)}%)`;
+        });
+      }
+
+      function nextSlide() {
+        if (currentSlide < totalSlides - 1) {
+          currentSlide++;
+          showSlide(currentSlide);
+        }
+      }
+
+      function prevSlide() {
+        if (currentSlide > 0) {
+          currentSlide--;
+          showSlide(currentSlide);
+        }
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") {
+          nextSlide();
+        } else if (e.key === "ArrowLeft") {
+          prevSlide();
+        }
+      });
+
+      // Initialize first slide
+      showSlide(currentSlide);
+    </script>
+  </body>
+</html>

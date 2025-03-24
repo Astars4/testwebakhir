@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Slide Halaman</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="flex flex-col items-center justify-center h-screen bg-gray-100">
+    <div class="mb-4">
+      <select id="yearMenu" class="px-4 py-2 border rounded-lg">
+        <option value="1">Tahun 2020</option>
+        <option value="2">Tahun 2021</option>
+        <option value="3">Tahun 2022</option>
+      </select>
+    </div>
+    <div class="w-3/4 bg-white p-6 shadow-lg rounded-lg relative">
+      <div class="slide" id="slide1">
+        <h1 class="text-2xl font-bold mb-4">Tahun 2020</h1>
+        <p>Ini adalah informasi tentang tahun 2020.</p>
+      </div>
+      <div class="slide hidden" id="slide2">
+        <h1 class="text-2xl font-bold mb-4">Tahun 2021</h1>
+        <p>Ini adalah informasi tentang tahun 2021.</p>
+      </div>
+      <div class="slide hidden" id="slide3">
+        <h1 class="text-2xl font-bold mb-4">Tahun 2022</h1>
+        <p>Ini adalah informasi tentang tahun 2022.</p>
+      </div>
+
+      <div class="flex justify-between mt-4">
+        <button id="prev" class="px-4 py-2 bg-gray-500 text-white rounded-lg">
+          Previous
+        </button>
+        <button id="next" class="px-4 py-2 bg-blue-500 text-white rounded-lg">
+          Next
+        </button>
+      </div>
+    </div>
+
+    <script>
+      let currentSlide = 1;
+      const totalSlides = 3;
+
+      function showSlide(index) {
+        document
+          .querySelectorAll(".slide")
+          .forEach((slide) => slide.classList.add("hidden"));
+        document.getElementById(`slide${index}`).classList.remove("hidden");
+        document.getElementById("yearMenu").value = index;
+      }
+
+      document.getElementById("next").addEventListener("click", () => {
+        if (currentSlide < totalSlides) {
+          currentSlide++;
+          showSlide(currentSlide);
+        }
+      });
+
+      document.getElementById("prev").addEventListener("click", () => {
+        if (currentSlide > 1) {
+          currentSlide--;
+          showSlide(currentSlide);
+        }
+      });
+
+      document
+        .getElementById("yearMenu")
+        .addEventListener("change", (event) => {
+          currentSlide = parseInt(event.target.value);
+          showSlide(currentSlide);
+        });
+
+      showSlide(currentSlide);
+    </script>
+  </body>
+</html>
