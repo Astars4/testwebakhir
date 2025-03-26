@@ -1,157 +1,155 @@
-// Menu Handling
-function handleMenu(menu) {
-  const contents = document.querySelectorAll("#output .content-section");
-  contents.forEach((content) => {
-    content.classList.add("hidden");
-  });
-  document.getElementById(`${menu}Content`).classList.remove("hidden");
+document.addEventListener("DOMContentLoaded", function () {
+  const timelineItems = document.querySelectorAll(".timeline li");
+  const timelineWrapper = document.querySelector(".timeline-wrapper");
+  const timeline = document.querySelector(".timeline");
 
-  if (menu === "quiz") resetQuiz();
-  if (menu === "timeline") showSlide(0);
-}
+  let currentPosition = 0;
+  let activeItem = null;
 
-// Material Detail Functions
-const materi = {
-  proklamasi:
-    "Proklamasi Kemerdekaan Indonesia dilaksanakan pada hari Jumat, 17 Agustus 1945...",
-  diponegoro:
-    "Perang Diponegoro atau Perang Jawa adalah perang besar dan berlangsung selama lima tahun...",
-  reformasi:
-    "Reformasi 1998 adalah gerakan reformasi di Indonesia yang dimulai pada tahun 1998...",
-};
-
-function showDetail(topic) {
-  document.getElementById("detailTitle").textContent = topic.replace("_", " ");
-  document.getElementById("detailContent").textContent =
-    materi[topic] || "Konten belum tersedia.";
-  document.getElementById("detailMateri").classList.remove("hidden");
-}
-
-function hideDetail() {
-  document.getElementById("detailMateri").classList.add("hidden");
-}
-
-// Quiz Functions
-const quizData = [
-  {
-    question: "Siapa yang membacakan teks Proklamasi Kemerdekaan Indonesia?",
-    options: ["Soekarno", "Mohammad Hatta", "Sutan Sjahrir", "Bung Tomo"],
-    answer: "Soekarno",
-  },
-  // ... other quiz questions
-];
-
-let currentQuestion = 0;
-let score = 0;
-
-function loadQuestion() {
-  const quizContainer = document.getElementById("quizContainer");
-  const questionData = quizData[currentQuestion];
-
-  quizContainer.innerHTML = `
-    <h3 class="question-text">${questionData.question}</h3>
-    <div class="options-container">
-      ${questionData.options
-        .map(
-          (option) => `
-        <button onclick="selectAnswer('${option}')" class="option-button">
-          ${option}
-        </button>
-      `
-        )
-        .join("")}
-    </div>
-  `;
-}
-
-function selectAnswer(selectedOption) {
-  const correctAnswer = quizData[currentQuestion].answer;
-  const buttons = document.querySelectorAll("#quizContainer .option-button");
-
-  buttons.forEach((button) => {
-    button.disabled = true;
-    if (button.textContent === correctAnswer) {
-      button.classList.add("correct-answer");
-    } else if (button.textContent === selectedOption) {
-      button.classList.add("wrong-answer");
+  // Initialize timeline
+  function initTimeline() {
+    // Set first item as active
+    if (timelineItems.length > 0) {
+      setActiveItem(timelineItems[0]);
     }
-  });
 
-  if (selectedOption === correctAnswer) score++;
-
-  setTimeout(() => {
-    if (currentQuestion < quizData.length - 1) {
-      currentQuestion++;
-      loadQuestion();
-    } else {
-      showResult();
-    }
-  }, 1000);
-}
-
-function showResult() {
-  document.getElementById("quizContainer").classList.add("hidden");
-  document.getElementById("quizResult").classList.remove("hidden");
-  document.getElementById(
-    "resultText"
-  ).textContent = `Anda menjawab ${score} dari ${quizData.length} pertanyaan dengan benar.`;
-}
-
-function resetQuiz() {
-  currentQuestion = 0;
-  score = 0;
-  document.getElementById("quizResult").classList.add("hidden");
-  document.getElementById("quizContainer").classList.remove("hidden");
-  loadQuestion();
-}
-
-// Slider Functions
-const slides = document.querySelectorAll(".slider-container .slide");
-let currentSlideIndex = 0;
-
-function showSlide(index) {
-  slides.forEach((slide) => {
-    slide.style.transform = "translate(0, 0)";
-  });
-
-  currentSlideIndex = index;
-
-  if (currentSlideIndex === 0) {
-    slides[0].style.transform = "translateX(0)";
-    slides[1].style.transform = "translateX(100%)";
-    slides[2].style.transform = "translateY(100%)";
-    slides[3].style.transform = "translateX(-100%)";
-  } else if (currentSlideIndex === 1) {
-    slides[0].style.transform = "translateX(-100%)";
-    slides[1].style.transform = "translateX(0)";
-  } else if (currentSlideIndex === 2) {
-    slides[0].style.transform = "translateY(-100%)";
-    slides[2].style.transform = "translateY(0)";
-  } else if (currentSlideIndex === 3) {
-    slides[0].style.transform = "translateX(100%)";
-    slides[3].style.transform = "translateX(0)";
+    // Center the timeline
+    centerTimeline();
   }
-}
 
-// Year Selector
-document.getElementById("yearMenu").addEventListener("change", function () {
-  const selectedYear = this.value;
-  document.querySelectorAll(".year-slide").forEach((slide) => {
-    slide.classList.remove("active");
+  // Set active item
+  function setActiveItem(item) {
+    if (activeItem) {
+      activeItem.classList.remove("active");
+    }
+
+    item.classList.add("active");
+    activeItem = item;
+
+    // Center the active item
+    centerActiveItem();
+  }
+
+  // Center the active item in view
+  function centerActiveItem() {
+    if (!activeItem) return;
+
+    const wrapperWidth = timelineWrapper.clientWidth;
+    const itemOffset = activeItem.offsetLeft;
+    const itemWidth = activeItem.clientWidth;
+
+    currentPosition = -(itemOffset - wrapperWidth / 2 + itemWidth / 2);
+    updateTimelinePosition();
+  }
+
+  // Center the timeline on load
+  function centerTimeline() {
+    const wrapperWidth = timelineWrapper.clientWidth;
+    const timelineWidth = timeline.scrollWidth;
+
+    currentPosition = -(timelineWidth - wrapperWidth) / 2;
+    updateTimelinePosition();
+  }
+
+  // Update timeline position
+  function updateTimelinePosition() {
+    const timelineWidth = timeline.scrollWidth;
+    const wrapperWidth = timelineWrapper.clientWidth;
+
+    // Limit scrolling
+    const maxPosition = 0;
+    const minPosition = -(timelineWidth - wrapperWidth);
+
+    currentPosition = Math.min(
+      maxPosition,
+      Math.max(minPosition, currentPosition)
+    );
+
+    timeline.style.transform = `translateX(${currentPosition}px) translateY(-50%)`;
+  }
+
+  // Event listeners for timeline items
+  timelineItems.forEach((item) => {
+    item.addEventListener("click", function () {
+      if (item === activeItem) {
+        item.classList.remove("active");
+        activeItem = null;
+      } else {
+        setActiveItem(item);
+      }
+    });
+
+    // Close button
+    const closeBtn = item.querySelector(".close-btn");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        item.classList.remove("active");
+        activeItem = null;
+      });
+    }
   });
-  document.getElementById(`yearSlide${selectedYear}`).classList.add("active");
-});
 
-// Keyboard Navigation
-document.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowRight") showSlide(1);
-  else if (e.key === "ArrowDown") showSlide(2);
-  else if (e.key === "ArrowLeft") showSlide(3);
-  else if (e.key === "ArrowUp") showSlide(0);
-});
+  // Keyboard arrow navigation
+  document.addEventListener("keydown", function (e) {
+    const wrapperWidth = timelineWrapper.clientWidth;
 
-// Initialize
-document.addEventListener("DOMContentLoaded", () => {
-  showSlide(0);
-  loadQuestion();
+    if (e.key === "ArrowLeft") {
+      // Move timeline to the left
+      currentPosition += wrapperWidth * 0.5;
+      updateTimelinePosition();
+    } else if (e.key === "ArrowRight") {
+      // Move timeline to the right
+      currentPosition -= wrapperWidth * 0.5;
+      updateTimelinePosition();
+    }
+  });
+
+  // Touch and mouse events for horizontal scrolling
+  let isDragging = false;
+  let startX;
+  let startPosition;
+
+  timelineWrapper.addEventListener("mousedown", startDrag);
+  timelineWrapper.addEventListener("touchstart", startDrag);
+
+  timelineWrapper.addEventListener("mousemove", drag);
+  timelineWrapper.addEventListener("touchmove", drag);
+
+  timelineWrapper.addEventListener("mouseup", endDrag);
+  timelineWrapper.addEventListener("touchend", endDrag);
+  timelineWrapper.addEventListener("mouseleave", endDrag);
+
+  function startDrag(e) {
+    isDragging = true;
+    startX = e.clientX || e.touches[0].clientX;
+    startPosition = currentPosition;
+    timelineWrapper.style.cursor = "grabbing";
+    e.preventDefault();
+  }
+
+  function drag(e) {
+    if (!isDragging) return;
+
+    const x = e.clientX || e.touches[0].clientX;
+    const dx = x - startX;
+    currentPosition = startPosition + dx;
+    updateTimelinePosition();
+  }
+
+  function endDrag() {
+    isDragging = false;
+    timelineWrapper.style.cursor = "grab";
+  }
+
+  // Initialize
+  initTimeline();
+
+  // Handle window resize
+  window.addEventListener("resize", function () {
+    centerTimeline();
+    if (activeItem) {
+      centerActiveItem();
+    }
+  });
 });
